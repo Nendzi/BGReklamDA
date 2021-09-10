@@ -1,0 +1,9 @@
+﻿ovde se smešta ISKLJUČIVO zipovani addin.
+
+Smeštanje ovod pluginn-a se može automatizovati
+tako što se doda postojeći projekat koji je 
+napravio taj plugin i pri svakom bildovanju rešenja
+komanda XCOPY će iskopirati addin i u ovaj direktorijum
+
+komandu XCOPY treba ubaciti u postojeći projekat sa pluginn-om
+i ona je slična onoj koja se koristi pri pravljenju addin-ova za inventor

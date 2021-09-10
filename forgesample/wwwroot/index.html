@@ -1,0 +1,105 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <title>TeamCAD - Edge analyzer</title>
+    <meta charset="utf-8" />
+    <link rel="shortcut icon" href="https://github.com/Autodesk-Forge/learn.forge.viewhubmodels/raw/master/img/favicon.ico">
+    <!-- Common packages: jQuery, Bootstrap -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css">
+    <!-- THREE from Forge viewer -->
+    <script src="https://developer.api.autodesk.com/modelderivative/v2/viewers/7.*/viewer3D.min.js"></script>
+    <!-- .NET SignalR -->
+    <script src="//unpkg.com/@aspnet/signalr@1.1.0/dist/browser/signalr.min.js"></script>
+    <!-- Files for this project -->
+    <script src="/js/ForgeDesignAutomation.js"></script>
+</head>
+
+<body style="height: 100%;">
+    <!-- options bar -->
+    <div class="communicationPanel divCenter">
+        <div class="panelSetup">
+            <a href="https://www.teamcad.rs/index.php/srb" target="_blank">
+                <img alt="TeamCAD Serbia" src="images/TeamCAD logo.jpg" height="80">
+            </a>
+        </div>
+        <!-- End of options bar -->
+        <!-- Login window -->
+        <div class="loginWindow" id="loginSetupWnd">
+            <div class="divCenter">
+                <label for="clientID" class="logInLabel">Forge Client ID</label>
+                <input id="forgeClientId" class="inputCred" type="text" required />
+            </div>
+            <div class="divCenter">
+                <label for="clientSecret" class="logInLabel">Forge Client Secret</label>
+                <input id="forgeClientSecret" class="inputCred" type="password" required />
+            </div>
+            <div class="divCenter">
+                <button id="login" class="loginBtn">Login and setup engine</button>
+            </div>
+        </div>
+        <!-- End of login window -->
+        <!-- Project selector window -->
+        <div id="projectSelector">
+            <div class="divCenter">
+                <label for="userProjects" class="logInLabel">Your projects</label>
+                <select class="selectCred" id="buckets">
+                </select>
+            </div>
+            <div class="divCenter">
+                <button id="projectSelect" class="loginBtn">Accept project and run application</button>
+            </div>
+        </div>
+        <!-- End of project selection -->
+        <!-- Create new bucket -->
+        <div id="newBucket">
+            <div class="divCenter">
+                <label for="clientBucket" class="logInLabel">New project name</label>
+                <input id="forgeBucket" class="inputCred" type="text" required />
+            </div>
+            <div class="divCenter">
+                <button id="loginWithNewBucket" class="loginBtn">Accept new project and run application</button>
+            </div>
+        </div>
+        <!-- End of new bucket creation -->
+
+    </div>
+    <div>
+
+    </div>
+    <!-- End of engine selector-->
+    <!-- Modal Define AppBundle & Activity -->
+    <div class="modal fade" id="defineActivityModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Cancel"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Create/Update AppBundle & Activity</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-warning"><center>You just need to define AppBundle &amp; Activity once.<br />If the plugin code changed, redefine (creates a new version).</center></div>
+                    <div class="form-group">
+                        <label for="localBundles">Select a local AppBundle:</label>
+                        <select class="form-control" id="localBundles"> </select>
+                        <b>Tip:</b> Make sure .ZIP bundles are placed at <b>/bundles/</b> folder
+                    </div>
+                    <div class="form-group">
+                        <label for="engines">Select engine:</label>
+                        <select class="form-control" id="engines"> </select>
+                    </div>
+                    For this sample the .ZIP name is used as suffix to define <b>AppBundle</b> and <b>Activity</b>
+                    names. Activities will have file and params input, and file output.
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-danger" id="clearAccount">Clear account</button>
+                    <button type="button" class="btn btn-primary" id="createAppBundleActivity">Create/Update</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="js/StartUp.js"></script>
+</body>
+
+</html>

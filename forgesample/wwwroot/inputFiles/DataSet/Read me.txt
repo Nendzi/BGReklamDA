@@ -1,0 +1,9 @@
+﻿Ovde smestiti sve što se šalje u Forge na obradu.
+Sklopni fajl, ili šablone za crteže ili delove
+
+Ovde se smešta i JSON fajl koji sadrži podatke koji
+će se primeniti pri automatizaciji na Fordžu.
+Šta god da je JSON fajl, addin mora biti tako napisan
+da pravilno interpretira podatke.
+
+ovde se NE SMEŠTA zip fajl koji sadrži addin.
