@@ -44,14 +44,11 @@ namespace forgesample.Controllers
                 {
                     string bucketIdent = bucket.Value.bucketKey;
                     bucketIdent.ToLower();
-                    if (bucketIdent.Contains("wallshelfconfig"))
-                    {
-                        nodes.Add(new TreeNode(
-                            bucket.Value.bucketKey,
-                            bucket.Value.bucketKey.Replace(ClientId + "-", string.Empty),
-                            "bucket",
-                            true));
-                    }
+                    nodes.Add(new TreeNode(
+                        bucket.Value.bucketKey,
+                        bucket.Value.bucketKey.Replace(ClientId + "-", string.Empty),
+                        "bucket",
+                        true));
                 }
             }
             else
