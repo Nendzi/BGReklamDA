@@ -3,21 +3,20 @@ body{
     margin: 0;
     padding: 0;
     height: 100vh;
-/* this is visual aid to see where is body clear at the end of project */
-    background-color: rgb(230, 228, 228);
+
 }
 
 /* button-color */
 button{
     background-color: rgb(180, 240, 240);
+    width: 100%;
 }
 /* the main container possitioned on center of the screen
    and 100px from the top. Display flex */
 .divCenter{
-    border: 1px solid red;
+    
     display: flex;
     flex-direction: column;
-    /* width: 60%; */
     align-items: center;
     margin: auto;
     position: relative;
@@ -27,32 +26,36 @@ button{
 .panelSetup{
     padding: 20px;
 }
-
-/* lofin fields possitioning */
-.loginWindow{
-    width: 40%;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
+.loginWindow, #projectSelector, #newBucket{
+    width: 520px;
 }
-/* possitioning of input fields */
-.fieldsPossition{
-    border: 1px solid greenyellow;
-    width: 100%;
-    position: relative;
+.fieldsPossition, .selectPossition{
+    
+    display: flex;
+    justify-content: space-between;
     padding: 10px;
 }
-.logInLabel{
-    padding-left: 50px;
-}
-.inputCred{
-    position: absolute;
-    right: 50px;
-    width: 50%;
-    min-width: 80px;
-}
 
+label{
+    width: 200px;
+}
+input{
+    width: 300px;
+}
+.buttonPossition{
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+}
+.selectCred{
+    width: 300px;
+}
 
 #projectSelector, #newBucket{
+    display: none;
+}
+
+
+.secondWindow{
     display: none;
 }
