@@ -85,6 +85,7 @@ function startWorkitem() {
     startConnection(function () {
         var formData = new FormData();
         var myJSONString = JSON.stringify(myShelf);
+        formData.append('inputFile', file);
         formData.append('shelfData', myJSONString);
         formData.append('forgeData', JSON.stringify({
             activityName: 'shelfconfig',
