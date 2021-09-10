@@ -1,4 +1,15 @@
-
+body{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+/* this is visual aid to see where is body clear at the end of project */
+    background-color: rgb(230, 228, 228);
+}
 button{
     background-color: rgb(180, 240, 240);
+}
+
+#projectSelector, #newBucket{
+    display: none;
 }
