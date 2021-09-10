@@ -2,23 +2,6 @@
     list('buckets', '/api/forge/oss/buckets');
 }
 
-function createNewBucket() {
-    var bucketKey = document.getElementById('forgeBucket').value;
-    jQuery.post({
-        url: '/api/forge/oss/buckets',
-        contentType: 'application/json',
-        data: JSON.stringify({ 'bucketKey': bucketKey }),
-        success: function (res) {
-            alert('New bucket has created');
-        },
-        error: function (err) {
-            if (err.status == 409)
-                alert('Bucket already exists - 409: Duplicated')
-            console.log(err);
-        }
-    });
-}
-
 function list(control, endpoint) {
     $('#' + control).find('option').remove().end();
     jQuery.ajax({
@@ -75,4 +58,21 @@ function selectProject() {
     wndElem.style.display = 'none';
     var newBucket = document.getElementById('newBucket');
     newBucket.style.display = 'none';
+}
+
+function createNewBucket() {
+    var bucketKey = document.getElementById('forgeBucket').value;
+    jQuery.post({
+        url: '/api/forge/oss/buckets',
+        contentType: 'application/json',
+        data: JSON.stringify({ 'bucketKey': bucketKey }),
+        success: function (res) {
+            alert('New bucket has created');
+        },
+        error: function (err) {
+            if (err.status == 409)
+                alert('Bucket already exists - 409: Duplicated')
+            console.log(err);
+        }
+    });
 }
