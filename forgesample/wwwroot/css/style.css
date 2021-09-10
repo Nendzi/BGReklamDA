@@ -27,7 +27,7 @@ button{
     padding: 20px;
 }
 .loginWindow, #projectSelector, #newBucket{
-    width: 520px;
+    width: 400px;
 }
 .fieldsPossition, .selectPossition{
     
@@ -40,7 +40,7 @@ label{
     width: 200px;
 }
 input{
-    width: 300px;
+    width: 280px;
 }
 .buttonPossition{
     display: flex;
@@ -48,7 +48,7 @@ input{
     padding: 10px;
 }
 .selectCred{
-    width: 300px;
+    width: 280px;
 }
 
 #projectSelector, #newBucket{
