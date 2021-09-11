@@ -21,7 +21,8 @@
 
 <body>
     <!-- options bar -->
-    <div class="communicationPanel divCenter">
+    <div class="firstWindow">
+    <div class="divCenter">
         <!-- teamCAD -->
         <div class="panelSetup">
             <a href="https://www.teamcad.rs/index.php/srb" target="_blank">
@@ -46,6 +47,7 @@
                 <button id="login" class="loginBtn">Login and setup engine</button>
             </div>
         </div>
+    </div>
         <!-- End of login window -->
         <!-- Project selector window -->
         <div id="projectSelector">
@@ -54,7 +56,7 @@
                 <select class="selectCred" id="buckets">
                 </select>
             </div>
-            
+
             <div class="buttonPossition">
                 <button id="projectSelect" class="loginBtn">Accept project and run application</button>
             </div>
@@ -74,21 +76,21 @@
 
     </div>
     <div class="secondWindow" id="visualPanel">
-        <div>
+        <div class="leftSide">
             <!-- Ovaj div theba da je 1/4 širine i postavljen je levo-->
-            <div id="forgeTree">
+            <div id="forgeTree" class="leftTop">
                 <!-- Ovaj div je 3/4 visine i postavljen je gore-->
             </div>
-            <div>
+            <div class="middleLeft">
                 <!-- Ovaj div je 1/4 visine i postavljen je u sredini-->
                 <label for="inputFile">Input file</label>
                 <input type="file" class="form-control-file" id="inputFile">
             </div>
-            <div id="layerList">
+            <div id="layerList" class="bottomLeft">
                 <!-- ovaj div je donja polovina-->
             </div>
         </div>
-        <div id="forgeViewer">
+        <div id="forgeViewer" class="rightSide">
             <!-- Ovaj div treba da je 3/4 širine i postavljen je desno-->
         </div>
     </div>
