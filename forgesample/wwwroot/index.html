@@ -26,22 +26,21 @@
         <!-- teamCAD -->
         <div class="panelSetup">
             <a href="https://www.teamcad.rs/index.php/srb" target="_blank">
-                <img alt="TeamCAD Serbia" src="images/TeamCAD logo.jpg" height="80">
+                <img alt="TeamCAD Serbia" src="images/TeamCAD logo.jpg" height="80" class="teamCadLogoImg">
             </a>
         </div>
         <!-- End of options bar -->
         <!-- Login window -->
+        
         <div class="loginWindow" id="loginSetupWnd">
             <div class="fieldsPossition">
                 <label for="clientID" class="logInLabel">Forge Client ID</label>
                 <input id="forgeClientId" class="inputCred" type="text" required />        
             </div>
-
-
+        
             <div class="fieldsPossition">
                 <label for="clientSecret" class="logInLabel">Forge Client Secret</label>
                 <input id="forgeClientSecret" class="inputCred" type="password" required />
-                    
             </div>
             <div class="buttonPossition">
                 <button id="login" class="loginBtn">Login and setup engine</button>
@@ -50,6 +49,7 @@
     </div>
         <!-- End of login window -->
         <!-- Project selector window -->
+        <div class="divCenter">
         <div id="projectSelector">
             <div class="selectPossition">
                 <label for="userProjects" class="logInLabel">Your projects</label>
@@ -61,8 +61,10 @@
                 <button id="projectSelect" class="loginBtn">Accept project and run application</button>
             </div>
         </div>
+        </div>
         <!-- End of project selection -->
         <!-- Create new bucket -->
+    <div class="divCenter">
         <div id="newBucket">
             <div class="fieldsPossition">
                 <label for="clientBucket" class="logInLabel">New project name</label>
@@ -72,6 +74,7 @@
                 <button id="loginWithNewBucket" class="loginBtn">Accept new project and run application</button>
             </div>
         </div>
+    </div>    
         <!-- End of new bucket creation -->
 
     </div>

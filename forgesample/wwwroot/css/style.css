@@ -10,59 +10,61 @@ body{
 button{
     background-color: rgb(180, 240, 240);
     width: 100%;
+    display: block;
+    margin: auto;
 }
+
 /* the first screen display proprety */
 .firstWindow{
-    display: none;
+    /* display: none; */
+    margin-top: 100px;
   
 }
 /* the main container possitioned on center of the screen
    and 100px from the top. Display flex */
 .divCenter{
-    
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    width: fit-content;
     margin: auto;
-    position: relative;
-    top: 100px;
 }
 /* teamCAD icon pssitioning */
 .panelSetup{
     padding: 20px;
 }
-.loginWindow, #projectSelector, #newBucket{
-    width: 400px;
+.teamCadLogoImg{
+    display: block;
 }
-.fieldsPossition, .selectPossition{
-    
-    display: flex;
-    justify-content: space-between;
+/* centering all the content in divs */
+.teamCadLogoImg{
+    margin: auto;
+}
+/* .loginWindow, #projectSelector, #newBucket{
+    width: 400px;
+} */
+.fieldsPossition, .selectPossition, 
+.buttonPossition{ 
+    width: 480px;
     padding: 10px;
 }
 
 label{
-    width: 200px;
+    width: 150px;
 }
 input{
     width: 280px;
-}
-.buttonPossition{
-    display: flex;
-    justify-content: center;
-    padding: 10px;
+    float: right;
 }
 .selectCred{
     width: 280px;
+    float: right;
 }
 
-#projectSelector, #newBucket{
+/* #projectSelector, #newBucket{
     display: none;
-}
+} */
 
 /* the secound window styleing */
 .secondWindow{
-    /* display: none; */
+    display: none;
     border: 1px solid orangered;
     width: 100%;
     
