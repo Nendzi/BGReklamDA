@@ -37,9 +37,7 @@ button{
 .teamCadLogoImg{
     margin: auto;
 }
-/* .loginWindow, #projectSelector, #newBucket{
-    width: 400px;
-} */
+
 .fieldsPossition, .selectPossition, 
 .buttonPossition{ 
     width: 480px;
@@ -58,9 +56,9 @@ input{
     float: right;
 }
 
-/* #projectSelector, #newBucket{
+#projectSelector, #newBucket{
     display: none;
-} */
+}
 
 /* the secound window styleing */
 .secondWindow{
