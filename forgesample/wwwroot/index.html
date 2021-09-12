@@ -84,25 +84,30 @@
         <!-- End of new bucket creation -->
 
     </div>
-    <div class="secondWindow" id="visualPanel">
-        <div class="leftSide">
-            <!-- Ovaj div theba da je 1/4 širine i postavljen je levo-->
-            <div id="appBuckets" class="leftTop">
-                <!-- Ovaj div je 3/4 visine i postavljen je gore-->
+    <div class="container-fluid fill secondWindow" id="visualPanel">
+        <div class="row fill">
+            <div class="col-sm-3 fill">
+                <!-- Ovaj div theba da je 1/4 širine i postavljen je levo-->
+                <div id="appBuckets" class="leftTop">
+                    <!-- Ovaj div je 3/4 visine i postavljen je gore-->
+                </div>
+                <div class="middleLeft">
+                    <!-- Ovaj div je 1/4 visine i postavljen je u sredini-->
+                    <button id="startWorkItem" class="loginBtn">Calculate and show edges</button>
+                    <form id="uploadFile" method='post' enctype="multipart/form-data">
+                        <input type="file" class="form-control-file" id="inputFile" style="visibility:hidden" />
+                    </form>
+                </div>
+                <div id="layerList" class="bottomLeft">
+                    <!-- ovaj div je donja polovina-->
+                </div>
             </div>
-            <div class="middleLeft">
-                <!-- Ovaj div je 1/4 visine i postavljen je u sredini-->
-                <button id="startWorkItem" class="loginBtn">Calculate and show edges</button>
-                <form id="uploadFile" method='post' enctype="multipart/form-data">
-                    <input type="file" class="form-control-file" id="inputFile" style="visibility:hidden" />
-                </form>
+
+            <div class="col-sm-9 fill">
+                <div id="forgeViewer">
+                    <!-- Ovaj div treba da je 3/4 širine i postavljen je desno-->
+                </div>
             </div>
-            <div id="layerList" class="bottomLeft">
-                <!-- ovaj div je donja polovina-->
-            </div>
-        </div>
-        <div id="forgeViewer" class="rightSide">
-            <!-- Ovaj div treba da je 3/4 širine i postavljen je desno-->
         </div>
     </div>
     <!-- End of engine selector-->
