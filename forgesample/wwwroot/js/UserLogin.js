@@ -58,6 +58,8 @@ function selectProject() {
     wndElem.style.display = 'none';
     var newBucket = document.getElementById('newBucket');
     newBucket.style.display = 'none';
+    document.getElementById('loginPanel').style.display = "none";
+    document.getElementById('visualPanel').style.display = "block";
 }
 
 function createNewBucket() {
@@ -68,6 +70,8 @@ function createNewBucket() {
         data: JSON.stringify({ 'bucketKey': bucketKey }),
         success: function (res) {
             alert('New bucket has created');
+            document.getElementById('loginPanel').style.display = "none";
+            document.getElementById('visualPanel').style.display = "block";
         },
         error: function (err) {
             if (err.status == 409)
