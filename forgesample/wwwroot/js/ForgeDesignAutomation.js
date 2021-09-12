@@ -1,22 +1,22 @@
 
-function prepareLists() {
-    list('activity', '/api/forge/designautomation/activities');
-    list('engines', '/api/forge/designautomation/engines');
-    list('localBundles', '/api/appbundles');
-}
+//function prepareLists() {
+//    list('activity', '/api/forge/designautomation/activities');
+//    list('engines', '/api/forge/designautomation/engines');
+//    list('localBundles', '/api/appbundles');
+//}
 
-function list(control, endpoint) {
-    $('#' + control).find('option').remove().end();
-    jQuery.ajax({
-        url: endpoint,
-        success: function (list) {
-            if (list.length === 0)
-                $('#' + control).append($('<option>', { disabled: true, text: 'Nothing found' }));
-            else
-                list.forEach(function (item) { $('#' + control).append($('<option>', { value: item, text: item })); })
-        }
-    });
-}
+//function list(control, endpoint) {
+//    $('#' + control).find('option').remove().end();
+//    jQuery.ajax({
+//        url: endpoint,
+//        success: function (list) {
+//            if (list.length === 0)
+//                $('#' + control).append($('<option>', { disabled: true, text: 'Nothing found' }));
+//            else
+//                list.forEach(function (item) { $('#' + control).append($('<option>', { value: item, text: item })); })
+//        }
+//    });
+//}
 
 function clearAccount() {
     if (!confirm('Clear existing activities & appbundles before start. ' +

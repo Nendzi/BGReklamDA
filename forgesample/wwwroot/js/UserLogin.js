@@ -2,6 +2,8 @@
     list('buckets', '/api/forge/oss/buckets');
 }
 
+var allBuckets = 'all';
+
 function list(control, endpoint) {
     $('#' + control).find('option').remove().end();
     jQuery.ajax({
@@ -11,7 +13,7 @@ function list(control, endpoint) {
         data: function (node) {
             return {
                 "id": node.id,
-                "fttp": fileTypeToTranslate
+                "bucketName": allBuckets
             };
         },
         success: function (list) {
@@ -58,8 +60,7 @@ function selectProject() {
     wndElem.style.display = 'none';
     var newBucket = document.getElementById('newBucket');
     newBucket.style.display = 'none';
-    document.getElementById('loginPanel').style.display = 'none';
-    document.getElementById('visualPanel').style.display = 'block';
+    openAndPrepareSecondWindow();
 }
 
 function createNewBucket() {
@@ -70,8 +71,7 @@ function createNewBucket() {
         data: JSON.stringify({ 'bucketKey': bucketKey }),
         success: function (res) {
             alert('New bucket has created');
-            document.getElementById('loginPanel').style.display = 'none';
-            document.getElementById('visualPanel').style.display = 'block';
+            openAndPrepareSecondWindow();
         },
         error: function (err) {
             if (err.status == 409)
@@ -79,4 +79,10 @@ function createNewBucket() {
             console.log(err);
         }
     });
+}
+
+function openAndPrepareSecondWindow() {
+    document.getElementById('loginPanel').style.display = 'none';
+    document.getElementById('visualPanel').style.display = 'block';
+    prepareAppBucketTree();
 }

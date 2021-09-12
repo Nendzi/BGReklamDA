@@ -26,8 +26,9 @@ namespace forgesample.Controllers
         /// </summary>
         [HttpGet]
         [Route("api/forge/oss/buckets")]
-        public async Task<IList<TreeNode>> GetOSSAsync(string id, string fttp)
+        public async Task<IList<TreeNode>> GetOSSAsync(string id, string bucketName)
         {
+            if (bucketName == null) { bucketName = "all"; };
             IList<TreeNode> nodes = new List<TreeNode>();
             dynamic oauth = await OAuthController.GetInternalAsync();
 
@@ -44,11 +45,15 @@ namespace forgesample.Controllers
                 {
                     string bucketIdent = bucket.Value.bucketKey;
                     bucketIdent.ToLower();
-                    nodes.Add(new TreeNode(
+                    if (bucketIdent.Contains( bucketName)  || bucketName == "all")
+                    {
+                        nodes.Add(new TreeNode(
                         bucket.Value.bucketKey,
                         bucket.Value.bucketKey.Replace(ClientId + "-", string.Empty),
                         "bucket",
                         true));
+                    }
+
                 }
             }
             else
@@ -61,32 +66,15 @@ namespace forgesample.Controllers
                 {
                     string fileName = objInfo.Value.objectKey;
                     fileName.ToLower();
-                    string fileType;
-                    if (fileName.Contains("zip") && fileName.Contains("output") || fileName.Contains("outcopy"))
+                    string fileType = "object";
+                    if (fileName.Contains("ipt"))
                     {
-                        if (fileName.Contains("output"))
-                        {
-                            fileType = "zipfile3D";
-                        }
-                        else
-                        {
-                            fileType = "zipfile2D";
-                        }
+                        nodes.Add(new TreeNode(
+                                            Base64Encode((string)objInfo.Value.objectId),
+                                            objInfo.Value.objectKey,
+                                            fileType,
+                                            false));
 
-                        if (fileType == fttp)
-                        {
-                            nodes.Add(new TreeNode(
-                                                Base64Encode((string)objInfo.Value.objectId),
-                                                objInfo.Value.objectKey,
-                                                fileType,
-                                                false));
-                        }
-
-                    }
-                    else if (fileName.Contains("pdf") && fileName.Contains("output"))
-                    {
-                        fileType = "pdfobject";
-                        nodes.Add(new TreeNode(Base64Encode((string)objInfo.Value.objectId), objInfo.Value.objectKey, fileType, false));
                     }
                 }
             }
