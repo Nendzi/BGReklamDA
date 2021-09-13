@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Autodesk.Forge.Core;
 using Autodesk.Forge.DesignAutomation;
 
-namespace forgesample
+namespace WebEdgeClassification
 {
     public class Program
     {

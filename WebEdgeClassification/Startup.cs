@@ -1,10 +1,10 @@
-﻿using forgesample.Hubs;
+﻿using WebEdgeClassification.Hubs;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace forgesample
+namespace WebEdgeClassification
 {
     public class Startup
     {

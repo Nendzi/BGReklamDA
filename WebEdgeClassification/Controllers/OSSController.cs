@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace forgesample.Controllers
+namespace WebEdgeClassification.Controllers
 {
     [ApiController]
     public class OSSController : ControllerBase
@@ -126,7 +126,7 @@ namespace forgesample.Controllers
                     foreach (KeyValuePair<string, dynamic> actualBucket in new DynamicDictionaryItems(allBuckets.items))
                     {
                         string bucketName = actualBucket.Value.bucketKey;
-                        if (bucketName.Contains(BucketName)) //kitchenconfig  designautomation
+                        if (bucketName.Contains(BucketName))
                         {
                             NewBucket = actualBucket;
                         }
@@ -136,8 +136,7 @@ namespace forgesample.Controllers
 
             return NewBucket;
         }
-
-        /* for this version deleting of bucket is forbiden
+                
         /// <summary>
         /// Delete bucket
         /// </summary>
@@ -149,7 +148,7 @@ namespace forgesample.Controllers
             dynamic token = OAuthController.GetInternalAsync();
             bucket.Configuration.AccessToken = token.access_token;
             await bucket.DeleteBucketAsync(bucketModel.bucketKey);
-        }*/
+        }
 
         /// <summary>
         /// Input model for CreateBucket method
@@ -230,7 +229,7 @@ namespace forgesample.Controllers
                 dynamic result = await objects.CreateSignedResourceAsync(bucketKey, fileToDownload, postBucketsSigned);
                 return result;
             }
-            catch (Exception ex) { }
+            catch (Exception) { }
 
             return null;
         }

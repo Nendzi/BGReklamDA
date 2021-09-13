@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace forgesample.Models
+namespace WebEdgeClassification.Models
 {
     public class UserModel
     {

@@ -88,8 +88,8 @@
   <PropertyGroup>
     <PostBuildEvent>xcopy /Y /F "$(ProjectDir)PackageContents.xml" "$(TargetDir)\Bundle\$(MSBuildProjectName).bundle\"
 xcopy /Y /F "$(TargetDir)*.*" "$(TargetDir)\Bundle\$(MSBuildProjectName).bundle\Contents\"
-del /F "$(ProjectDir)..\forgesample\wwwroot\bundles\UpdateIPTParam.zip"
-"C:\Program Files\7-Zip\7z.exe" a -tzip "$(ProjectDir)../forgesample/wwwroot/bundles/UpdateIPTParam.zip" "$(TargetDir)\bundle\$(MSBuildProjectName).bundle\" -xr0!*.pdb
+del /F "$(ProjectDir)wwwroot\bundles\UpdateIPTParam.zip"
+"C:\Program Files\7-Zip\7z.exe" a -tzip "$(ProjectDir)wwwroot/bundles/UpdateIPTParam.zip" "$(TargetDir)\bundle\$(MSBuildProjectName).bundle\" -xr0!*.pdb
 </PostBuildEvent>
   </PropertyGroup>
 </Project>

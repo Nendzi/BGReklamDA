@@ -2,9 +2,9 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Autodesk.Forge;
-using forgesample.Models;
+using WebEdgeClassification.Models;
 
-namespace forgesample.Controllers
+namespace WebEdgeClassification.Controllers
 {
     [ApiController]
     public class OAuthController : ControllerBase

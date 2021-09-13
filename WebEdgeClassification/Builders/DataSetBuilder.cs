@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.IO.Compression;
 
-namespace forgesample.Builders
+namespace WebEdgeClassification.Builders
 {
     public class DataSetBuilder
     {

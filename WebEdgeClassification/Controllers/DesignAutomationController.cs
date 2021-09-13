@@ -2,9 +2,9 @@ using Autodesk.Forge;
 using Autodesk.Forge.DesignAutomation;
 using Autodesk.Forge.DesignAutomation.Model;
 using Autodesk.Forge.Model;
-using forgesample;
-using forgesample.Builders;
-using forgesample.Hubs;
+using WebEdgeClassification;
+using WebEdgeClassification.Builders;
+using WebEdgeClassification.Hubs;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -24,15 +24,15 @@ using Parameter = Autodesk.Forge.DesignAutomation.Model.Parameter;
 using WorkItem = Autodesk.Forge.DesignAutomation.Model.WorkItem;
 using WorkItemStatus = Autodesk.Forge.DesignAutomation.Model.WorkItemStatus;
 
-namespace forgesample.Controllers
+namespace WebEdgeClassification.Controllers
 {
     [ApiController]
     public class DesignAutomationController : ControllerBase
     {
         //Naming
-        private string _zipFileName = "DA4ShelfBuilderPlugin.bundle.zip";
-        private string _bundleName = "WallShelfConfig";
-        private string _activityName = "WallShelfConfig";
+        private string _zipFileName = "DA4EdgeClaasificationPlugin.bundle.zip";
+        private string _bundleName = "EdgeClassificationConfig";
+        private string _activityName = "EdgeClassificationConfig";
         private string _aliasName = "dev";
         private string _appBundleDescription = "Creates something ...";
         // Used to access the application folder (temp location for files & bundles)
@@ -278,7 +278,7 @@ namespace forgesample.Controllers
         public class StartWorkitemInput
         {
             public IFormFile inputFile { get; set; }
-            public string shelfData { get; set; }
+            public string componentData { get; set; }
             public string forgeData { get; set; }
         }
 
@@ -293,7 +293,7 @@ namespace forgesample.Controllers
             try
             {
                 DataSetBuilder dataSetBuilder = new DataSetBuilder(LocalDataSetFolder, "DataSet");
-                dataSetBuilder.SaveJsonData(input.shelfData, "params.json");
+                dataSetBuilder.SaveJsonData(input.componentData, "params.json");
                 dataSetBuilder.ZipFolder(zipedFileName);
             }
             catch (Exception ex)
@@ -435,7 +435,7 @@ namespace forgesample.Controllers
                 dynamic signedUrl = await objectsApi.CreateSignedResourceAsyncWithHttpInfo(bucketKey, outputFileName, new PostBucketsSigned(10), "read");
                 await _hubContext.Clients.Client(id).SendAsync("downloadResult", (string)(signedUrl.Data.signedUrl));
             }
-            catch (Exception e) { }
+            catch (Exception) { }
 
             // ALWAYS return ok (200)
             return Ok();

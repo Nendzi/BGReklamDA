@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 
-namespace forgesample.Hubs
+namespace WebEdgeClassification.Hubs
 {
     /// <summary>
     /// Class uses for SignalR

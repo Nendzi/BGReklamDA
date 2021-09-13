@@ -1,4 +1,4 @@
-﻿namespace forgesample
+﻿namespace WebEdgeClassification
 {
    public enum BucketRegions
     {

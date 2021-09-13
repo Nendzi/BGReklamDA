@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29418.71
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "forgesample", "forgesample\forgesample.csproj", "{AFBF1E9B-9949-4DFC-8D5E-9EF8D5347AC1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebEdgeClassification", "WebEdgeClassification\WebEdgeClassification.csproj", "{AFBF1E9B-9949-4DFC-8D5E-9EF8D5347AC1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateDWGParam", "updateDWGParam\UpdateDWGParam.csproj", "{F17BDCE4-8CD6-4DAF-B57A-3A4B8137D736}"
 EndProject

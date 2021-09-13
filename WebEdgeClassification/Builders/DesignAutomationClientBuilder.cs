@@ -3,7 +3,7 @@ using Autodesk.Forge.DesignAutomation;
 using Microsoft.Extensions.Options;
 using System.Net.Http;
 
-namespace forgesample.Builders
+namespace WebEdgeClassification.Builders
 {
     public class DesignAutomationClientBuilder
     {
