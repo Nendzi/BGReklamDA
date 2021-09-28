@@ -13,6 +13,6 @@
         <PackageReference Include="RestSharp" Version="106.12.0" />
     </ItemGroup>
     <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-      <Exec Command="xcopy /Y /F &quot;$(ProjectDir)PackageContents.xml&quot; &quot;$(TargetDir)\Bundle\$(MSBuildProjectName).bundle\&quot;&#xD;&#xA;xcopy /Y /F &quot;$(TargetDir)*.*&quot; &quot;$(TargetDir)\Bundle\$(MSBuildProjectName).bundle\Contents\&quot;&#xD;&#xA;del /F &quot;$(ProjectDir)wwwroot\bundles\UpdateIPTParam.zip&quot;&#xD;&#xA;&quot;C:\Program Files\7-Zip\7z.exe&quot; a -tzip &quot;$(ProjectDir)wwwroot/bundles/UpdateIPTParam.zip&quot; &quot;$(TargetDir)\bundle\$(MSBuildProjectName).bundle\&quot; -xr0!*.pdb&#xD;&#xA;" />
+      <Exec Command="xcopy /Y /F &quot;$(SolutionDir)..\DASolution4BGReklam\DAQuest4Loops\Output\DAQuest4LoopsPlugin.bundle.zip&quot; &quot;$(ProjectDir)wwwroot\bundles\&quot;&#xD;&#xA;" />
     </Target>
 </Project>

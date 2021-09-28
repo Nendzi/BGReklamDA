@@ -3,6 +3,7 @@ using Autodesk.Forge.Model;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -17,10 +18,11 @@ namespace WebEdgeClassification.Controllers
         public OSSController(IWebHostEnvironment env) { _env = env; }
         public string ClientId { get { return OAuthController.GetAppSetting("FORGE_CLIENT_ID").ToLower(); } }
         // BucketName
-        public string BucketName { get { return "wallshelfconfig"; } }
+        private string _bucketName;
+        public string BucketName { get => _bucketName; }
         // server region for bucket, can be EMEA also
-        private string bucketRegion = "US";
-
+        private string _bucketRegion;
+        public string BucketRegion { get => _bucketRegion; }
         /// <summary>
         /// Return list of buckets (id=#) or list of objects (id=bucketKey)
         /// </summary>
@@ -39,13 +41,12 @@ namespace WebEdgeClassification.Controllers
                 appBuckets.Configuration.AccessToken = oauth.access_token;
 
                 // to simplify, let's return only the first 100 buckets
-                // TODO - enable usage od EMAE buckets
-                dynamic buckets = await appBuckets.GetBucketsAsync(bucketRegion, 100);
+                dynamic buckets = await appBuckets.GetBucketsAsync(_bucketRegion, 100);
                 foreach (KeyValuePair<string, dynamic> bucket in new DynamicDictionaryItems(buckets.items))
                 {
                     string bucketIdent = bucket.Value.bucketKey;
                     bucketIdent.ToLower();
-                    if (bucketIdent.Contains( bucketName)  || bucketName == "all")
+                    if (bucketIdent.Contains(bucketName) || bucketName == "all")
                     {
                         nodes.Add(new TreeNode(
                         bucket.Value.bucketKey,
@@ -111,18 +112,20 @@ namespace WebEdgeClassification.Controllers
             BucketsApi buckets = new BucketsApi();
             dynamic token = await OAuthController.GetInternalAsync();
             buckets.Configuration.AccessToken = token.access_token;
-            PostBucketsPayload bucketPayload = new PostBucketsPayload(string.Format("{0}-{1}", ClientId, bucket.bucketKey.ToLower()), null,
+            _bucketName = bucket.bucketKey.ToLower();
+            _bucketRegion = bucket.region.ToString();
+            PostBucketsPayload bucketPayload = new PostBucketsPayload(string.Format("{0}-{1}", ClientId, _bucketName), null,
               PostBucketsPayload.PolicyKeyEnum.Transient);
 
             try
             {
-                NewBucket = await buckets.CreateBucketAsync(bucketPayload, bucketRegion);
+                NewBucket = await buckets.CreateBucketAsync(bucketPayload, BucketRegion);
             }
             catch (Exception e)
             {
                 if (e.Message == "Error calling CreateBucket: {\"reason\":\"Bucket already exists\"}")
                 {
-                    dynamic allBuckets = await buckets.GetBucketsAsync("US", 100);
+                    dynamic allBuckets = await buckets.GetBucketsAsync(BucketRegion, 100);
                     foreach (KeyValuePair<string, dynamic> actualBucket in new DynamicDictionaryItems(allBuckets.items))
                     {
                         string bucketName = actualBucket.Value.bucketKey;
@@ -136,7 +139,7 @@ namespace WebEdgeClassification.Controllers
 
             return NewBucket;
         }
-                
+
         /// <summary>
         /// Delete bucket
         /// </summary>
@@ -155,6 +158,7 @@ namespace WebEdgeClassification.Controllers
         /// </summary>
         public class BucketModel
         {
+            public string region { get; set; }
             public string bucketKey { get; set; }
         }
 
@@ -205,6 +209,22 @@ namespace WebEdgeClassification.Controllers
             await objectForDelete.DeleteObjectAsync(objectModel.bucketKey, objectModel.objectKey);
         }
 
+        [HttpGet]
+        [Route("api/forge/oss/object")]
+        public async Task<string> GetObject([FromBody] DownloadFile file)
+        {
+            dynamic oauth = OAuthController.GetInternalAsync();
+            ObjectsApi forgeObject = new ObjectsApi();
+            forgeObject.Configuration.AccessToken = oauth.access_token;
+            string bucketKey = string.Format("{0}-{1}", ClientId, _bucketName).ToLower();
+            try
+            {
+                string result = await forgeObject.GetObjectAsync(bucketKey, "edges.json"); //downloadFile.fileToDownload
+                return result;
+            }
+            catch (Exception) { }
+            return null;
+        }
         /// <summary>
         /// Make signed Url for object in bucket
         /// </summary>

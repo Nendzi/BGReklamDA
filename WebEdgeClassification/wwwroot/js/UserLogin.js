@@ -19,8 +19,7 @@ function list(control, endpoint) {
         success: function (list) {
             if (list.length === 0)
                 $('#' + control).append($('<option>', { disabled: true, text: 'Nothing found' }));
-            else
-            {
+            else {
                 list.forEach(function (item) {
                     $('#' + control).append($('<option>', { value: item.id, text: item.text }));
                 })
@@ -68,7 +67,10 @@ function createNewBucket() {
     jQuery.post({
         url: '/api/forge/oss/buckets',
         contentType: 'application/json',
-        data: JSON.stringify({ 'bucketKey': bucketKey }),
+        data: JSON.stringify({
+            'region': "US",
+            'bucketKey': bucketKey
+        }),
         success: function (res) {
             alert('New bucket has created');
             openAndPrepareSecondWindow();
@@ -84,5 +86,6 @@ function createNewBucket() {
 function openAndPrepareSecondWindow() {
     document.getElementById('loginPanel').style.display = 'none';
     document.getElementById('visualPanel').style.display = 'block';
+    createAppBundleActivity();
     prepareAppBucketTree();
 }

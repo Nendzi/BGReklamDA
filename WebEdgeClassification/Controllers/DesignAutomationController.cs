@@ -30,7 +30,7 @@ namespace WebEdgeClassification.Controllers
     public class DesignAutomationController : ControllerBase
     {
         //Naming
-        private string _zipFileName = "DA4EdgeClaasificationPlugin.bundle.zip";
+        private string _zipFileName = "DAQuest4LoopsPlugin.bundle.zip";
         private string _bundleName = "EdgeClassificationConfig";
         private string _activityName = "EdgeClassificationConfig";
         private string _aliasName = "dev";
@@ -119,27 +119,27 @@ namespace WebEdgeClassification.Controllers
                     Parameters = new Dictionary<string, Parameter>()
                     {
                         { "inputFile", new Parameter()
-                        {
-                            Description = "input file",
-                            LocalName = "ime fajla iz Data Set-a",
-                            Verb = Verb.Get,
-                            Zip = false
-                        }
+                            {
+                                Description = "input file",
+                                LocalName = "box.ipt",
+                                Verb = Verb.Get,
+                                Zip = false
+                            }
                         },
-                        { "inputJson", new Parameter()
-                        {
-                            Description = "input json",
-                            LocalName = "params.json",
-                            Verb = Verb.Get,
-                            Zip = false }
-                        },
+                        //{ "inputJson", new Parameter()
+                        //{
+                        //    Description = "input json",
+                        //    LocalName = "params.json",
+                        //    Verb = Verb.Get,
+                        //    Zip = false }
+                        //},
                         { "outputFile", new Parameter()
-                        {
-                            Description = "output file",
-                            LocalName = "outputFile." + engineAttributes.extension,
-                            Verb = Verb.Put,
-                            Zip = false
-                        }
+                            {
+                                Description = "output json file",
+                                LocalName = "edges.json",
+                                Verb = Verb.Put,
+                                Zip = false
+                            }
                         }
                     }/*,
                     Settings = new Dictionary<string, ISetting>()
@@ -202,7 +202,7 @@ namespace WebEdgeClassification.Controllers
         public async Task<IActionResult> CreateAppBundle([FromBody] JObject appBundleSpecs)
         {
             //each call make new instance so every time i is nessessary to read Engine name
-            string engineName = appBundleSpecs["engine"].Value<string>();
+            EngineName = appBundleSpecs["engine"].Value<string>();
 
             // check if ZIP with bundle is here
             string packageZipPath = Path.Combine(LocalBundlesFolder, ZipFileName);
@@ -220,7 +220,7 @@ namespace WebEdgeClassification.Controllers
                 AppBundle appBundleSpec = new AppBundle()
                 {
                     Package = packageZipPath,
-                    Engine = engineName,
+                    Engine = EngineName,
                     Id = AppBundleName,
                     Description = _appBundleDescription
                 };
@@ -281,7 +281,6 @@ namespace WebEdgeClassification.Controllers
             public string componentData { get; set; }
             public string forgeData { get; set; }
         }
-
         /// <summary>
         /// Start a new workitem
         /// </summary>
@@ -410,6 +409,133 @@ namespace WebEdgeClassification.Controllers
                 return Ok(new { WorkItemId = e.Message });
             }
         }
+        /// <summary>
+        /// Start a new workitem for get and draw edges
+        /// </summary>
+        [HttpPost]
+        [Route("api/forge/designautomation/workitems/edges")]
+        public async Task<IActionResult> StartWorkitem4Edges([FromForm] StartWorkitemInput input)
+        {
+            string zipedFileName = @"DataSet\box.ipt";
+            //try
+            //{
+            //    DataSetBuilder dataSetBuilder = new DataSetBuilder(LocalDataSetFolder, "DataSet");
+            //    dataSetBuilder.ZipFolder(zipedFileName);
+            //}
+            //catch (Exception ex)
+            //{
+            //    return Ok(new { WorkItemId = ex.Message }); ;
+            //}
+            // basic input validation
+            JObject connItemData = JObject.Parse(input.forgeData);
+            string uniqueActivityName = string.Format("{0}.{1}+{2}", NickName, ActivityName, Alias);
+            string browserConnectionId = connItemData["browerConnectionId"].Value<string>();
+
+            // save the file on the server
+            var fileSavePath = Path.Combine(LocalDataSetFolder, zipedFileName);
+
+            // OAuth token
+            dynamic oauth = await OAuthController.GetInternalAsync();
+
+            // upload file to OSS Bucket
+            // 1. ensure bucket existis
+            BucketsApi buckets = new BucketsApi();
+            buckets.Configuration.AccessToken = oauth.access_token;
+            try
+            {
+                PostBucketsPayload bucketPayload = new PostBucketsPayload(bucketKey, null, PostBucketsPayload.PolicyKeyEnum.Transient);
+                await buckets.CreateBucketAsync(bucketPayload, BucketRegion.ToString());
+            }
+            catch { }; // in case bucket already exists
+                       // 2. upload inputFile
+            string inputFileNameOSS = string.Format("{0}_input_{1}", DateTime.Now.ToString("yyyyMMddhhmmss"), "box.ipt"); // avoid overriding
+            ObjectsApi objects = new ObjectsApi();
+            objects.Configuration.AccessToken = oauth.access_token;
+            using (StreamReader streamReader = new StreamReader(fileSavePath))
+                await objects.UploadObjectAsync(bucketKey, inputFileNameOSS, (int)streamReader.BaseStream.Length, streamReader.BaseStream, "application/octet-stream");
+
+            // prepare workitem arguments
+            // 1. input file
+            XrefTreeArgument inputFileArgument = new XrefTreeArgument()
+            {
+                Verb = Verb.Get,
+                LocalName = "box.ipt",
+                Url = string.Format("https://developer.api.autodesk.com/oss/v2/buckets/{0}/objects/{1}", bucketKey, inputFileNameOSS),
+                Headers = new Dictionary<string, string>()
+                 {
+                     { "Authorization", "Bearer " + oauth.access_token }
+                 }
+            };
+            //// 2. input json
+            //dynamic inputJson = new JObject();
+            //// TODO - create inputJson based on result from plugin (edges data)
+            //XrefTreeArgument inputJsonArgument = new XrefTreeArgument()
+            //{
+            //    LocalName = "params.json",
+            //    Verb = Verb.Get,
+            //    Url = "data:application/json, " + ((JObject)inputJson).ToString(Formatting.None).Replace("\"", "'")
+            //};
+            // 3. output file
+            string outputFileNameOSS = "edges.json"; //string.Format("{0}_edges_{1}", DateTime.Now.ToString("yyyyMMddhhmmss"), "Result.json"); // avoid overriding
+            XrefTreeArgument outputFileArgument = new XrefTreeArgument()
+            {
+                Url = string.Format("https://developer.api.autodesk.com/oss/v2/buckets/{0}/objects/{1}", bucketKey, outputFileNameOSS),
+                Verb = Verb.Put,
+                Headers = new Dictionary<string, string>()
+                   {
+                       {"Authorization", "Bearer " + oauth.access_token }
+                   }
+            };
+
+            // prepare & submit workitem
+            // the callback contains the connectionId (used to identify the client) and the outputFileName of this workitem
+
+            XrefTreeArgument completedArgument = new XrefTreeArgument()
+            {
+                Verb = Verb.Post,
+                Url = string.Format(
+                "{0}/api/forge/callback/designautomation?id={1}&outputFileName={2}",
+                OAuthController.GetAppSetting("FORGE_WEBHOOK_URL"),
+                //"https://webwallshelfbuilder.herokuapp.com",
+                browserConnectionId,
+                outputFileNameOSS)
+            };
+
+            XrefTreeArgument progressArgument = new XrefTreeArgument()
+            {
+                Verb = Verb.Post,
+                Url = string.Format(
+                    "{0}/api/forge/callback/designautomation/progress?id={1}",
+                    OAuthController.GetAppSetting("FORGE_WEBHOOK_URL"),
+                    //"https://webwallshelfbuilder.herokuapp.com",
+                    browserConnectionId)
+            };
+
+            WorkItem workItemSpec = new WorkItem()
+            {
+                ActivityId = uniqueActivityName,
+                Arguments = new Dictionary<string, IArgument>()
+                {
+                    { "inputFile", inputFileArgument },
+                    { "outputFile", outputFileArgument },
+                    { "onComplete", completedArgument },
+                    { "onProgress", progressArgument }
+                }
+            };
+
+            try
+            {
+                WorkItemStatus workItemStatus = await _designAutomation.CreateWorkItemAsync(workItemSpec);
+                return Ok(new
+                {
+                    WorkItemId = workItemStatus.Id
+                });
+            }
+            catch (Exception e)
+            {
+                return Ok(new { WorkItemId = e.Message });
+            }
+        }
 
         /// <summary>
         /// Callback from Design Automation Workitem (onProgress or onComplete)
@@ -427,9 +553,9 @@ namespace WebEdgeClassification.Controllers
                 var client = new RestClient(bodyJson["reportUrl"].Value<string>());
                 var request = new RestRequest(string.Empty);
 
-                byte[] bs = client.DownloadData(request);
-                string report = System.Text.Encoding.Default.GetString(bs);
-                await _hubContext.Clients.Client(id).SendAsync("onComplete", report);
+                //byte[] bs = client.DownloadData(request);
+                //string report = System.Text.Encoding.Default.GetString(bs);
+                //await _hubContext.Clients.Client(id).SendAsync("onComplete", report);
 
                 ObjectsApi objectsApi = new ObjectsApi();
                 dynamic signedUrl = await objectsApi.CreateSignedResourceAsyncWithHttpInfo(bucketKey, outputFileName, new PostBucketsSigned(10), "read");

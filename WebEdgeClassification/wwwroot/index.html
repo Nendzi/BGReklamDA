@@ -13,16 +13,21 @@
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jstree/3.3.7/themes/default/style.min.css" />
     <!-- this project files -->
     <link rel="stylesheet" href="./css/style.css">
+    <!-- color picker -->
+    <link rel="stylesheet" href="dist/color-picker.min.css" />
     <!-- Autodesk Forge Viewer files -->
     <link rel="stylesheet" href="https://developer.api.autodesk.com/modelderivative/v2/viewers/7.*/style.min.css" type="text/css">
     <script src="https://developer.api.autodesk.com/modelderivative/v2/viewers/7.*/viewer3D.min.js"></script>
     <!-- .NET SignalR -->
     <script src="//unpkg.com/@aspnet/signalr@1.1.0/dist/browser/signalr.min.js"></script>
     <!-- Files for this project -->
+    <script src="/js/InitVar.js"></script>
     <script src="/js/ForgeViewer.js"></script>
     <script src="/js/ForgeTree.js"></script>
     <script src="/js/ForgeDesignAutomation.js"></script>
+    <script src="/js/EdgeManipulator.js"></script>
     <script src="/js/UserLogin.js"></script>
+    <script type="text/javascript" src="/js/dist/color-picker.min.js"></script>
 </head>
 
 <body>
@@ -82,8 +87,8 @@
             </div>
         </div>
         <!-- End of new bucket creation -->
-
     </div>
+
     <div class="container-fluid fill secondWindow" id="visualPanel">
         <div class="row fill">
             <div class="col-sm-3 fill">
@@ -93,13 +98,18 @@
                 </div>
                 <div class="middleLeft">
                     <!-- Ovaj div je 1/4 visine i postavljen je u sredini-->
-                    <button id="startWorkItem" class="loginBtn">Calculate and show edges</button>
+                    <button id="startWorkitemForEdges" class="loginBtn">Calculate and show edges</button>
+                    <button id="downloadEdges" class="loginBtn">download edges</button>
                     <form id="uploadFile" method='post' enctype="multipart/form-data">
                         <input type="file" class="form-control-file" id="inputFile" style="visibility:hidden" />
                     </form>
                 </div>
-                <div id="layerList" class="bottomLeft">
+                <div id="layerList" class="">
                     <!-- ovaj div je donja polovina-->
+                    <input type="text" class="leftSide" placeholder="Layer name" />
+                    <div class="colorSelector"></div>
+                    <button type="button">&#9587</button>
+
                 </div>
             </div>
 

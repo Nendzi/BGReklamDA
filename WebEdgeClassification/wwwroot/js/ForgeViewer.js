@@ -1,4 +1,5 @@
 ﻿var viewer;
+var edgeBuilder;
 
 function launchViewer(urn) {
     var options = {
@@ -7,10 +8,9 @@ function launchViewer(urn) {
     };
 
     Autodesk.Viewing.Initializer(options, () => {
-        viewer = new Autodesk.Viewing.GuiViewer3D(document.getElementById('forgeViewer'), { extensions: ['Autodesk.DocumentBrowser'] });
+        viewer = new Autodesk.Viewing.GuiViewer3D(document.getElementById('forgeViewer'), { extensions: ['Autodesk.DocumentBrowser', 'Autodesk.Viewing.SceneBuilder'] });
         viewer.setTheme('light-theme');
         viewer.start();
-        var documentId = 'urn:' + urn;
         var documentId = 'urn:' + urn;
         Autodesk.Viewing.Document.load(documentId, onDocumentLoadSuccess, onDocumentLoadFailure);
     });
@@ -25,6 +25,18 @@ function onDocumentLoadSuccess(doc) {
 
     viewer.loadDocumentNode(doc, geometryItems[0]).then(i => {
         // documented loaded, any action?
+        createModelBuilder().then(() => {
+            ShowAllEdges();
+        });
+    });
+}
+
+async function createModelBuilder() {
+    await viewer.loadExtension('Autodesk.Viewing.SceneBuilder');
+    var ext = viewer.getExtension('Autodesk.Viewing.SceneBuilder');
+    edgeBuilder = await ext.addNewModel({
+        conserveMemory: false,
+        modelNameOverride: 'AllEdges'
     });
 }
 

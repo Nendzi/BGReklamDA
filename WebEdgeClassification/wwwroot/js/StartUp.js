@@ -3,7 +3,9 @@
     $('#clearAccount').click(clearAccount);
     $('#defineActivityShow').click(defineActivityModal);
     $('#createAppBundleActivity').click(createAppBundleActivity);
-    $('#startWorkitem').click(startWorkitem);
+    $('#startWorkitemForEdges').click(startWorkItemForEdges);
+    $('#downloadEdges').click(downloadEdges);
+    
 
     $('#login').click(login);
     $('#projectSelect').click(selectProject);

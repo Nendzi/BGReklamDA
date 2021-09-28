@@ -1,17 +1,16 @@
-body{
+body {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
     height: 100vh;
-
 }
 
 .fill {
-    height: 100vh ;
+    height: 100vh;
 }
 
 /* button-color */
-button{
+button {
     background-color: rgb(180, 240, 240);
     width: 100%;
     display: block;
@@ -19,59 +18,61 @@ button{
 }
 
 /* the first screen display proprety */
-.firstWindow{
+.firstWindow {
     display: block;
     margin-top: 100px;
-  
 }
 /* the main container possitioned on center of the screen
    and 100px from the top. Display flex */
-.divCenter{
+.divCenter {
     width: fit-content;
     margin: auto;
 }
 /* teamCAD icon pssitioning */
-.panelSetup{
+.panelSetup {
     padding: 20px;
-    
 }
-.teamCadLogoImg{
+
+.teamCadLogoImg {
     display: block;
 }
 /* centering all the content in divs */
-.teamCadLogoImg{
+.teamCadLogoImg {
     margin: auto;
 }
 
-.fieldsPossition, .selectPossition, 
-.buttonPossition{ 
+.fieldsPossition, .selectPossition,
+.buttonPossition {
     width: 480px;
     padding: 10px;
 }
 
-label{
+label {
     width: 150px;
 }
-input{
-    width: 280px;
-    float: right;
-}
-.selectCred{
+
+input {
     width: 280px;
     float: right;
 }
 
-#projectSelector, #newBucket{
+.selectCred {
+    width: 280px;
+    float: right;
+}
+
+#projectSelector, #newBucket {
     display: none;
 }
 
 /* the secound window styleing */
-.secondWindow{
+.secondWindow {
     display: none;
     border: 1px solid orangered;
     overflow: hidden;
 }
-.leftSide, .rightSide{
+
+.leftSide, .rightSide {
     box-shadow: 0 0 2px 2px rgb(211, 210, 210);
     width: 23%;
     min-width: 250px;
@@ -79,11 +80,17 @@ input{
     float: left;
 }
 
-.rightSide{
+.rightSide {
     width: 75%;
     margin: 2px 7px 2px;
     max-width: calc(98vw - 280px);
-    
+}
+
+.colorSelector {
+    height: 24px;
+    width: 24px;
+    margin:0 10px;
+    background-color: yellow;
 }
 
 #forgeViewer {
@@ -91,21 +98,21 @@ input{
 }
 
 /* content of left side */
-.leftTop{
+.leftTop {
     border: 1px solid blue;
     width: 100%;
     height: 36%;
-    
 }
-.middleLeft{
+
+.middleLeft {
     border: 1px solid purple;
     width: 100%;
     height: 14%;
     padding: 2px 5px;
 }
-.bottomLeft{
+
+.bottomLeft {
     border: 1px solid greenyellow;
     width: 100%;
     height: 50%;
-    
 }
