@@ -85,13 +85,32 @@ input {
     margin: 2px 7px 2px;
     max-width: calc(98vw - 280px);
 }
-
+/* selecting layer style */
+.layerListContainer{
+    width: 100%;
+    height: 50px;
+    border: 1px gray solid;
+    padding: 8px;
+}
+.layerInput{
+    width: 45%;
+    float: left;
+}
 .colorSelector {
     height: 24px;
     width: 24px;
-    margin:0 10px;
+    
     background-color: yellow;
+    position: absolute;
+    left: 52%
+    
 }
+.layerBtn{
+    width: 20%;
+    position: absolute;
+    right: 23px;
+}
+
 
 #forgeViewer {
     width: 100%;
@@ -116,3 +135,4 @@ input {
     width: 100%;
     height: 50%;
 }
+
