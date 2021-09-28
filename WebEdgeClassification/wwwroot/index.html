@@ -14,7 +14,8 @@
     <!-- this project files -->
     <link rel="stylesheet" href="./css/style.css">
     <!-- color picker -->
-    <link rel="stylesheet" href="dist/color-picker.min.css" />
+    <link rel="stylesheet" href="./js/dist/color-picker.min.css" />
+    <script src="/js/dist/color-picker.min.js"></script>
     <!-- Autodesk Forge Viewer files -->
     <link rel="stylesheet" href="https://developer.api.autodesk.com/modelderivative/v2/viewers/7.*/style.min.css" type="text/css">
     <script src="https://developer.api.autodesk.com/modelderivative/v2/viewers/7.*/viewer3D.min.js"></script>
@@ -27,7 +28,6 @@
     <script src="/js/ForgeDesignAutomation.js"></script>
     <script src="/js/EdgeManipulator.js"></script>
     <script src="/js/UserLogin.js"></script>
-    <script type="text/javascript" src="/js/dist/color-picker.min.js"></script>
 </head>
 
 <body>
@@ -106,8 +106,8 @@
                 </div>
                 <div id="layerList" class="">
                     <!-- ovaj div je donja polovina-->
-                    <input type="text" class="leftSide" placeholder="Layer name" />
-                    <div class="colorSelector"></div>
+                    <input type="text" class="" placeholder="Layer name" />
+                    <div id="clrSlcr" class="colorSelector"></div>
                     <button type="button">&#9587</button>
 
                 </div>
@@ -150,7 +150,12 @@
             </div>
         </div>
     </div>
+    <!-- Color Picker-->
+    <div class="clrWindow" id="colorPickerWindow" >
+
+    </div>
     <script src="js/StartUp.js"></script>
+    <script src="/js/ColorSelector.js"></script>
 </body>
 
 </html>

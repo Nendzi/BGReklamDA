@@ -11,6 +11,8 @@
     $('#projectSelect').click(selectProject);
     $('#loginWithNewBucket').click(createNewBucket);
 
+    $('#clrSlcr').click(openColorPicker);
+
     $('#inputFile').change(function () {
         var node = $('#appBuckets').jstree(true).get_selected(true)[0];
         var _this = this;

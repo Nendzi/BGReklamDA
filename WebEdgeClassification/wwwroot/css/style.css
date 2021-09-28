@@ -93,6 +93,10 @@ input {
     background-color: yellow;
 }
 
+.clrWindow{
+    display: none;
+}
+
 #forgeViewer {
     width: 100%;
 }
