@@ -16,6 +16,8 @@ function launchViewer(urn) {
     });
 }
 
+var compensation;
+
 function onDocumentLoadSuccess(doc) {
     var geometryItems = doc.getRoot().search({ "role": "3d", "type": "geometry" });
     // Try 3D first
@@ -24,9 +26,11 @@ function onDocumentLoadSuccess(doc) {
     }
 
     viewer.loadDocumentNode(doc, geometryItems[0]).then(i => {
-        // documented loaded, any action?
         createModelBuilder().then(() => {
-            ShowAllEdges();
+            compensation = NOP_VIEWER.model.getGlobalOffset();
+            if (allEdges) {
+                ShowAllEdges();
+            }            
         });
     });
 }

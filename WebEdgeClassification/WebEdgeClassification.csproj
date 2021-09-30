@@ -5,6 +5,7 @@
     <ItemGroup>
         <Folder Include="wwwroot\bundles\" />
         <Folder Include="wwwroot\css\" />
+        <Folder Include="wwwroot\js\dist\" />
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="Autodesk.Forge" Version="1.9.0" />

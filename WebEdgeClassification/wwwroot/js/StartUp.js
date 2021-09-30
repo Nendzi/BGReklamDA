@@ -5,13 +5,18 @@
     $('#createAppBundleActivity').click(createAppBundleActivity);
     $('#startWorkitemForEdges').click(startWorkItemForEdges);
     $('#downloadEdges').click(downloadEdges);
+    $('#uploadEdges').click(uploadAllEdges);
     
 
     $('#login').click(login);
     $('#projectSelect').click(selectProject);
     $('#loginWithNewBucket').click(createNewBucket);
 
-    $('#clrSlcr').click(openColorPicker);
+    $('#addEdgesToInside').click(putEdgesOnInside);
+    $('#addEdgesToOutside').click(putEdgesOnOutside);
+    $('#addEdgesToSweeping1').click(putEdgesOnSweeping1);
+    $('#addEdgesToSweeping2').click(putEdgesOnSweeping2);
+    $('#addEdgesToIgnore').click(putEdgesOnIgnore);
 
     $('#inputFile').change(function () {
         var node = $('#appBuckets').jstree(true).get_selected(true)[0];

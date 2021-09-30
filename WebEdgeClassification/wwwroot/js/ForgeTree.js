@@ -35,6 +35,7 @@
         $('#appBuckets').jstree('open_all');
     }).bind("activate_node.jstree", function (evt, data) {
         if (data != null && data.node != null && data.node.type == 'object') {
+            selectedPart = data.node.original.text;
             $("#forgeViewer").empty();
             var urn = data.node.id;
             getForgeToken(function (access_token) {
@@ -56,6 +57,7 @@
         }
     });
 }
+var selectedPart;
 
 function autodeskCustomMenu(autodeskNode) {
     var items;

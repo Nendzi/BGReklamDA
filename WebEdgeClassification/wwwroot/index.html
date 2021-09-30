@@ -4,18 +4,18 @@
 <head>
     <title>TeamCAD - Edge analyzer</title>
     <meta charset="utf-8" />
-    <link rel="shortcut icon" href="https://github.com/Autodesk-Forge/learn.forge.viewhubmodels/raw/master/img/favicon.ico">
+    <link rel="shortcut icon" href="https://www.teamcad.rs/favicon.ico">
     <!-- Common packages: jQuery, Bootstrap, jstree -->
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jstree/3.3.7/jstree.min.js"></script>
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" />
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jstree/3.3.7/themes/default/style.min.css" />
     <!-- this project files -->
     <link rel="stylesheet" href="./css/style.css">
-    <!-- color picker -->
-    <link rel="stylesheet" href="./js/dist/color-picker.min.css" />
-    <script src="/js/dist/color-picker.min.js"></script>
+    <!-- color picker
+    <link rel="stylesheet" href="/js/dist/colr_pickr.min.css"/>
+    <script src="/js/dist/colr_pickr.min.js"></script>-->
     <!-- Autodesk Forge Viewer files -->
     <link rel="stylesheet" href="https://developer.api.autodesk.com/modelderivative/v2/viewers/7.*/style.min.css" type="text/css">
     <script src="https://developer.api.autodesk.com/modelderivative/v2/viewers/7.*/viewer3D.min.js"></script>
@@ -37,7 +37,7 @@
             <!-- teamCAD -->
             <div class="panelSetup">
                 <a href="https://www.teamcad.rs/index.php/srb" target="_blank">
-                    <img alt="TeamCAD Serbia" src="images/TeamCAD logo.jpg" height="80" class="teamCadLogoImg">
+                    <img alt="TeamCAD Serbia" src="https://www.teamcad.rs/images/Logo/LOGO_TeamCAD_logo.png" height="100" class="teamCadLogoImg">
                 </a>
             </div>
             <!-- End of options bar -->
@@ -98,19 +98,41 @@
                 </div>
                 <div class="middleLeft">
                     <!-- Ovaj div je 1/4 visine i postavljen je u sredini-->
-                    <button id="startWorkitemForEdges" class="loginBtn">Calculate and show edges</button>
-                    <button id="downloadEdges" class="loginBtn">download edges</button>
+                    <button id="startWorkitemForEdges" class="loginBtn">Extract edges</button>
+                    <button id="downloadEdges" class="loginBtn">Download edges</button>
+                    <button id="uploadEdges" class="loginBtn">Upload edges</button>
+                    <button id="downLoadResult" class="loginBtn">Waiting for result...</button>
                     <form id="uploadFile" method='post' enctype="multipart/form-data">
                         <input type="file" class="form-control-file" id="inputFile" style="visibility:hidden" />
                     </form>
                 </div>
-                <div id="layerList" class="layerListContainer">
-                    <!-- ovaj div je donja polovina-->
-                    <input type="text" class="" placeholder="Layer name" />
-                    <div id="clrSlcr" class="colorSelector"></div>
-                    <button type="button">&#9587</button>
-
+                <!-- ovaj div je donja polovina-->
+                <div class="layerListContainer">
+                    <input type="text" class="layerInput" value="Inside" />
+                    <div id="clrSlcr" class="colorSelector" style="background-color: blue"></div>
+                    <button class="layerBtn" id="addEdgesToInside" type="button">Add edges</button>
                 </div>
+                <div class="layerListContainer">
+                    <input type="text" class="layerInput" value="Outside" />
+                    <div id="clrSlcr" class="colorSelector" style="background-color: red"></div>
+                    <button class="layerBtn" id="addEdgesToOutside" type="button">Add edges</button>
+                </div>
+                <div class="layerListContainer">
+                    <input type="text" class="layerInput" value="Sweeping1" />
+                    <div id="clrSlcr" class="colorSelector" style="background-color: green"></div>
+                    <button class="layerBtn" id="addEdgesToSweeping1" type="button">Add edges</button>
+                </div>
+                <div class="layerListContainer">
+                    <input type="text" class="layerInput" value="Sweeping2" />
+                    <div id="clrSlcr" class="colorSelector" style="background-color: purple"></div>
+                    <button class="layerBtn" id="addEdgesToSweeping2" type="button">Add edges</button>
+                </div>
+                <div class="layerListContainer">
+                    <input type="text" class="layerInput" value="Ignore" />
+                    <div id="clrSlcr" class="colorSelector" style="background-color: yellow"></div>
+                    <button class="layerBtn" id="addEdgesToIgnore" type="button">Add edges</button>
+                </div>
+                <div id="infoPanel"></div>
             </div>
 
             <div class="col-sm-9 fill">
@@ -150,11 +172,8 @@
             </div>
         </div>
     </div>
-    <!-- Color Picker-->
-    <div class="clrWindow" id="colorPickerWindow" >
-
-    </div>
     <script src="js/StartUp.js"></script>
+    <!-- Color Picker-->
     <script src="/js/ColorSelector.js"></script>
 </body>
 

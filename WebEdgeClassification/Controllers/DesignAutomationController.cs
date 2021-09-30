@@ -32,7 +32,7 @@ namespace WebEdgeClassification.Controllers
         //Naming
         private string _zipFileName = "DAQuest4LoopsPlugin.bundle.zip";
         private string _bundleName = "EdgeClassificationConfig";
-        private string _activityName = "EdgeClassificationConfig";
+        private string _baseactivityName = "EdgeClassificationConfig";
         private string _aliasName = "dev";
         private string _appBundleDescription = "Creates something ...";
         // Used to access the application folder (temp location for files & bundles)
@@ -50,7 +50,7 @@ namespace WebEdgeClassification.Controllers
         // Bundle name
         public string AppBundleName { get { return _bundleName; } }
         // Activity name
-        public string ActivityName { get { return _activityName; } }
+        public string BaseActivityName { get { return _baseactivityName; } }
         /// Prefix for AppBundles and Activities
         public string NickName { get { return OAuthController.GetAppSetting("FORGE_CLIENT_ID"); } }
         /// Alias for the app (e.g. DEV, STG, PROD). This value may come from an environment variable
@@ -93,30 +93,40 @@ namespace WebEdgeClassification.Controllers
 
             return definedActivities;
         }
-
-        /// <summary>
-        /// Define a new activity
-        /// </summary>
-        [HttpPost]
-        [Route("api/forge/designautomation/activities")]
-        public async Task<IActionResult> CreateActivity([FromBody] JObject activitySpecs)
+        private Activity GetActivitySpecification(string version)
         {
-            string engineName = activitySpecs["engine"].Value<string>();
-
-            Page<string> activities = await _designAutomation.GetActivitiesAsync();
-            string qualifiedActivityId = string.Format("{0}.{1}+{2}", NickName, ActivityName, Alias);
-            if (!activities.Data.Contains(qualifiedActivityId))
+            Activity output;
+            if (version == "alfa")
             {
-                // define the activity
-                dynamic engineAttributes = EngineAttributes(engineName);
-                string commandLine = string.Format(engineAttributes.commandLine, AppBundleName);
-                Activity activitySpec = new Activity()
+                output = new Activity()
                 {
-                    Id = ActivityName,
-                    Appbundles = new List<string>() { string.Format("{0}.{1}+{2}", NickName, AppBundleName, Alias) },
-                    CommandLine = new List<string>() { commandLine },
-                    Engine = engineName,
+                    Appbundles = new List<string>() { string.Format("{0}.{1}+{2}", NickName, AppBundleName, "Mutual") },
                     Parameters = new Dictionary<string, Parameter>()
+                    {
+                        { "inputFile", new Parameter()
+                        {
+                            Description = "input file",
+                            LocalName = "box.ipt",
+                            Verb = Verb.Get,
+                            Zip = false
+                        }
+                        },
+                        { "outputFile", new Parameter()
+                        {
+                            Description = "output json file",
+                            LocalName = "edges.json",
+                            Verb = Verb.Put,
+                            Zip = false
+                        }
+                        }
+                    }
+                };
+                return output;
+            }
+            output = new Activity()
+            {
+                Appbundles = new List<string>() { string.Format("{0}.{1}+{2}", NickName, AppBundleName, "Mutual") },
+                Parameters = new Dictionary<string, Parameter>()
                     {
                         { "inputFile", new Parameter()
                             {
@@ -126,32 +136,51 @@ namespace WebEdgeClassification.Controllers
                                 Zip = false
                             }
                         },
-                        //{ "inputJson", new Parameter()
-                        //{
-                        //    Description = "input json",
-                        //    LocalName = "params.json",
-                        //    Verb = Verb.Get,
-                        //    Zip = false }
-                        //},
+                        { "inputJson", new Parameter()
+                            {
+                                Description = "input json",
+                                LocalName = "layers.json",
+                                Verb = Verb.Get
+                            }
+                        },
                         { "outputFile", new Parameter()
                             {
-                                Description = "output json file",
-                                LocalName = "edges.json",
+                                Description = "output ipt file",
+                                LocalName = "Result.ipt",
                                 Verb = Verb.Put,
                                 Zip = false
                             }
                         }
-                    }/*,
-                    Settings = new Dictionary<string, ISetting>()
-                    {
-                        { "script", new StringSetting(){ Value = engineAttributes.script } }
-                    }*/
-                };
+                    }
+            };
+            return output;
+        }
+        /// <summary>
+        /// Define a new activity
+        /// </summary>
+        [HttpPost]
+        [Route("api/forge/designautomation/activities")]
+        public async Task<IActionResult> CreateActivity([FromBody] JObject activitySpecs)
+        {
+            string engineName = activitySpecs["engine"].Value<string>();
+            string version = activitySpecs["version"].Value<string>();
+            string activityName = BaseActivityName + "_" + version;
+            Page<string> activities = await _designAutomation.GetActivitiesAsync();
+            string qualifiedActivityId = string.Format("{0}.{1}+{2}", NickName, activityName, Alias);
+            if (!activities.Data.Contains(qualifiedActivityId))
+            {
+                // define the activity
+                dynamic engineAttributes = EngineAttributes(engineName);
+                string commandLine = string.Format(engineAttributes.commandLine[version], AppBundleName);
+                Activity activitySpec = GetActivitySpecification(version);
+                activitySpec.Id = BaseActivityName + "_" + version;
+                activitySpec.CommandLine = new List<string>() { commandLine };
+                activitySpec.Engine = engineName;
                 Activity newActivity = await _designAutomation.CreateActivityAsync(activitySpec);
 
                 // specify the alias for this Activity
                 Alias aliasSpec = new Alias() { Id = Alias, Version = 1 };
-                Alias newAlias = await _designAutomation.CreateActivityAliasAsync(ActivityName, aliasSpec);
+                Alias newAlias = await _designAutomation.CreateActivityAliasAsync(activityName, aliasSpec);
 
                 return Ok(new { Activity = qualifiedActivityId });
             }
@@ -163,6 +192,12 @@ namespace WebEdgeClassification.Controllers
         /// </summary>
         private dynamic EngineAttributes(string engine)
         {
+            Dictionary<string, string> cmdln = new Dictionary<string, string>
+            {
+                { "alfa", "$(engine.path)\\inventorcoreconsole.exe /i \"$(args[inputFile].path)\" /al \"$(appbundles[{0}].path)\"" },
+                { "bravo", "$(engine.path)\\inventorcoreconsole.exe /i \"$(args[inputFile].path)\" /al \"$(appbundles[{0}].path)\" \"$(args[inputJson].path)\"" }
+            };
+
             if (engine.Contains("AutoCAD"))
             {
                 return new
@@ -176,10 +211,11 @@ namespace WebEdgeClassification.Controllers
             {
                 return new
                 {
-                    commandLine = "$(engine.path)\\inventorcoreconsole.exe /i \"$(args[inputFile].path)\" /al \"$(appbundles[{0}].path)\"",
+                    commandLine = cmdln,
                     extension = "ipt",
                     script = string.Empty
                 };
+
             }
             throw new Exception("Invalid engine");
         }
@@ -213,7 +249,7 @@ namespace WebEdgeClassification.Controllers
 
             // check if app bundle is already define
             dynamic newAppVersion;
-            string qualifiedAppBundleId = string.Format("{0}.{1}+{2}", NickName, AppBundleName, Alias);
+            string qualifiedAppBundleId = string.Format("{0}.{1}+{2}", NickName, AppBundleName, "Mutual");
             if (!appBundles.Data.Contains(qualifiedAppBundleId))
             {
                 // create an appbundle (version 1)
@@ -228,7 +264,7 @@ namespace WebEdgeClassification.Controllers
                 if (newAppVersion == null) throw new Exception("Cannot create new app");
 
                 // create alias pointing to v1
-                Alias aliasSpec = new Alias() { Id = Alias, Version = 1 };
+                Alias aliasSpec = new Alias() { Id = "Mutual", Version = 1 };
                 Alias newAlias = await _designAutomation.CreateAppBundleAliasAsync(AppBundleName, aliasSpec);
 
                 //upload the zip with .bundle
@@ -281,31 +317,26 @@ namespace WebEdgeClassification.Controllers
             public string componentData { get; set; }
             public string forgeData { get; set; }
         }
+        public class StartWorkItemWithFileName
+        {
+            public string edgeData { get; set; }
+            public string forgeData { get; set; }
+        }
         /// <summary>
         /// Start a new workitem
         /// </summary>
         [HttpPost]
         [Route("api/forge/designautomation/workitems")]
-        public async Task<IActionResult> StartWorkitem([FromForm] StartWorkitemInput input)
+        public async Task<IActionResult> StartWorkitem([FromForm] StartWorkItemWithFileName input)
         {
-            string zipedFileName = "file name that will be send. That could be ipt or zip";
-            try
-            {
-                DataSetBuilder dataSetBuilder = new DataSetBuilder(LocalDataSetFolder, "DataSet");
-                dataSetBuilder.SaveJsonData(input.componentData, "params.json");
-                dataSetBuilder.ZipFolder(zipedFileName);
-            }
-            catch (Exception ex)
-            {
-                return Ok(new { WorkItemId = ex.Message }); ;
-            }
             // basic input validation
-            JObject connItemData = JObject.Parse(input.forgeData);
-            string uniqueActivityName = string.Format("{0}.{1}", NickName, ActivityName);
-            string browserConnectionId = connItemData["browerConnectionId"].Value<string>();
+            JObject forgeData = JObject.Parse(input.forgeData);
+            string edgesData = input.edgeData;
+            string uniqueActivityName = string.Format("{0}.{1}+{2}", NickName, BaseActivityName + "_bravo", Alias);
+            string browserConnectionId = forgeData["browerConnectionId"].Value<string>();
 
             // save the file on the server
-            var fileSavePath = Path.Combine(LocalDataSetFolder, zipedFileName);
+            //var fileSavePath = Path.Combine(LocalDataSetFolder, zipedFileName);
 
             // OAuth token
             dynamic oauth = await OAuthController.GetInternalAsync();
@@ -321,18 +352,18 @@ namespace WebEdgeClassification.Controllers
             }
             catch { }; // in case bucket already exists
                        // 2. upload inputFile
-            string inputFileNameOSS = string.Format("{0}_input_{1}", DateTime.Now.ToString("yyyyMMddhhmmss"), "File name for upload"); // avoid overriding
+            string inputFileNameOSS = forgeData["fileName"].Value<string>(); // avoid overriding
             ObjectsApi objects = new ObjectsApi();
             objects.Configuration.AccessToken = oauth.access_token;
-            using (StreamReader streamReader = new StreamReader(fileSavePath))
-                await objects.UploadObjectAsync(bucketKey, inputFileNameOSS, (int)streamReader.BaseStream.Length, streamReader.BaseStream, "application/octet-stream");
+            //using (StreamReader streamReader = new StreamReader(fileSavePath))
+            //    await objects.UploadObjectAsync(bucketKey, inputFileNameOSS, (int)streamReader.BaseStream.Length, streamReader.BaseStream, "application/octet-stream");
 
             // prepare workitem arguments
             // 1. input file
             XrefTreeArgument inputFileArgument = new XrefTreeArgument()
             {
                 Verb = Verb.Get,
-                LocalName = "Name using on server",
+                LocalName = "box.ipt",
                 Url = string.Format("https://developer.api.autodesk.com/oss/v2/buckets/{0}/objects/{1}", bucketKey, inputFileNameOSS),
                 Headers = new Dictionary<string, string>()
                  {
@@ -340,13 +371,12 @@ namespace WebEdgeClassification.Controllers
                  }
             };
             // 2. input json
-            dynamic inputJson = new JObject();
-            // TODO - create inputJson based on result from plugin (edges data)
+            string inputJson = edgesData.ToString().Replace("\"", "'");
             XrefTreeArgument inputJsonArgument = new XrefTreeArgument()
             {
-                LocalName = "params.json",
+                LocalName = "layers.json",
                 Verb = Verb.Get,
-                Url = "data:application/json, " + ((JObject)inputJson).ToString(Formatting.None).Replace("\"", "'")
+                Url = "data:application/json, " + inputJson
             };
             // 3. output file
             string outputFileNameOSS = string.Format("{0}_output_{1}", DateTime.Now.ToString("yyyyMMddhhmmss"), "ResultingPart.ipt"); // avoid overriding
@@ -390,6 +420,7 @@ namespace WebEdgeClassification.Controllers
                 Arguments = new Dictionary<string, IArgument>()
                 {
                     { "inputFile", inputFileArgument },
+                    { "inputJson", inputJsonArgument },
                     { "outputFile", outputFileArgument },
                     { "onComplete", completedArgument },
                     { "onProgress", progressArgument }
@@ -428,7 +459,7 @@ namespace WebEdgeClassification.Controllers
             //}
             // basic input validation
             JObject connItemData = JObject.Parse(input.forgeData);
-            string uniqueActivityName = string.Format("{0}.{1}+{2}", NickName, ActivityName, Alias);
+            string uniqueActivityName = string.Format("{0}.{1}+{2}", NickName, BaseActivityName + "_alfa", Alias);
             string browserConnectionId = connItemData["browerConnectionId"].Value<string>();
 
             // save the file on the server

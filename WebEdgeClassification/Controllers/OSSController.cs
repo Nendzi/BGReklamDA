@@ -68,14 +68,13 @@ namespace WebEdgeClassification.Controllers
                     string fileName = objInfo.Value.objectKey;
                     fileName.ToLower();
                     string fileType = "object";
-                    if (fileName.Contains("ipt"))
+                    if (fileName.Contains("_input_"))
                     {
                         nodes.Add(new TreeNode(
                                             Base64Encode((string)objInfo.Value.objectId),
                                             objInfo.Value.objectKey,
                                             fileType,
                                             false));
-
                     }
                 }
             }

@@ -36,7 +36,7 @@ namespace WebEdgeClassification.Controllers
         {
             if (PublicToken == null || PublicToken.ExpiresAt < DateTime.UtcNow)
             {
-                PublicToken = await Get2LeggedTokenAsync(new Scope[] { Scope.ViewablesRead, Scope.DataRead });
+                PublicToken = await Get2LeggedTokenAsync(new Scope[] { Scope.ViewablesRead, Scope.DataRead, Scope.DataWrite });
                 PublicToken.ExpiresAt = DateTime.UtcNow.AddSeconds(PublicToken.expires_in);
             }
             return PublicToken;
